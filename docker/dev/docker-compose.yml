@@ -1,0 +1,22 @@
+version: "3"
+services:
+  server:
+    build:
+      context: ../../
+      dockerfile: docker/dev/Dockerfile
+    container_name: sms-management-api
+    ports:
+      - 3000:3000
+    volumes:
+      - /app/node_modules
+      - ../../:/app
+    depends_on:
+      - database
+    environment:
+      DATABASE_URI: mongodb://database:27017/sms-manager
+
+  database:
+    image: mongo
+    container_name: mongo-db
+    restart: always
+
