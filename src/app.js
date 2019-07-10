@@ -3,9 +3,10 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import yaml from 'yamljs';
-import  swaggerUi from 'swagger-ui-express';
+import swaggerUi from 'swagger-ui-express';
 
 import appRouter from './app-router';
+
 import config from './config';
 
 const app = express();
