@@ -1,5 +1,5 @@
 run:
-		docker-compose -f docker/dev/docker-compose.yml up --build
+		docker-compose -f docker/dev/docker-compose.yml up
 
 test:
 		docker-compose -f docker/dev/docker-compose.yml exec server npm run test
