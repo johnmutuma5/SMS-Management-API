@@ -1,0 +1,61 @@
+openapi: 3.0.0
+
+info:
+  title: Andela Meals API documentation
+  description: This is an API that enables Andela Nairobi employees to check in for meals using their staff issued ID cards.
+  version: 1.0.0
+
+servers:
+  - url: '{protocol}://127.0.0.1:{port}/v1'
+    description: Development server (uses test data)
+    variables:
+      port:
+        enum:
+          - "3002"
+          - "3003"
+        default: "3003"
+      protocol:
+        enum:
+          - http
+          - https
+        default: http
+
+consumes:
+  - application/json
+
+content:
+  - application/json
+
+paths:
+  /contacts:
+    post:
+      summary: Creates new contacts
+      description: Allows users to create a new contact 
+      tags:
+        - Contacts
+      responses:
+        "200":
+          description: On successful creation of a new contact
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                        example: 200
+                      success:
+                        type: string,
+                        example: true
+                      message:
+                        type: string
+                        example: Contact created successfully
+                      # employees:
+                      #   $ref: "#/components/schemas/Employees"
+
