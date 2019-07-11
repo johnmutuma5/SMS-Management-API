@@ -11,9 +11,8 @@ servers:
     variables:
       port:
         enum:
-          - "3002"
-          - "3003"
-        default: "3003"
+          - "3000"
+        default: "3000"
       protocol:
         enum:
           - http
@@ -33,8 +32,23 @@ paths:
       description: Allows users to create a new contact 
       tags:
         - Contacts
+          
+      requestBody:
+        description: |+
+          The request body for adding a contact should include:
+             - `phone` - the phone numner
+             - `name` - the contact name
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Contact"
+            examples:
+              John:
+                $ref: "#/components/examples/Contact/John"
+
       responses:
-        "200":
+        "201":
           description: On successful creation of a new contact
           content:
             application/json:
@@ -43,19 +57,121 @@ paths:
                 properties:
                   status:
                     type: string
-                    example: success
+                  message:
+                    type: string
                   data:
                     type: object
                     properties:
-                      status:
-                        type: string
-                        example: 200
-                      success:
-                        type: string,
-                        example: true
-                      message:
-                        type: string
-                        example: Contact created successfully
-                      # employees:
-                      #   $ref: "#/components/schemas/Employees"
+                      contact:
+                        $ref: "#/responses/objects/Contact"
+              examples:
+                CreateJohnContactSuccess:
+                  value:
+                    status: success 
+                    message: Created contact successfully
+                    data:
+                      contact:
+                        _id: 5aaff444bbccd3ee34
+                        name: John
+                        phone: "0728655088"
+        "409":
+          description: Conflicting phone numbers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+              examples:
+                PhoneConflict:
+                  value:
+                    status: fail
+                    message: Contact already exists
+                    data: {} 
 
+  /contacts/{id}:
+    delete:
+      summary: Deleting contacts
+      description: Allows users to delete a contact 
+      tags:
+        - Contacts
+          
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the contact to delete
+          schema:
+            type: string
+          example: 1ababebbffdbff344
+
+      responses:
+        "200":
+          description: Contact deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+              examples:
+                DeleteContactSuccess:
+                  value:
+                    status: success
+                    message: Contact deleted successfully
+                    data: {}
+
+        "400":
+          description: Invalid ObjectId for the contact
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: strng
+              examples:
+                InvalidObjectId:
+                  value:
+                    status: fail
+                    message: Invalid contact object id
+
+
+
+components:
+  schemas:
+    Contact:
+      type: object
+      properties:
+        phone:
+          type: string
+        name:
+          type: string
+  examples:
+    Contact:
+      John:
+        value:
+          name: John
+          phone: "0728655088"
+          
+responses:
+  objects:
+    Contact:
+      allOf:
+        - $ref: "#/components/schemas/Contact"
+        - type: object
+          properties:
+            _id:
+              type: string 
