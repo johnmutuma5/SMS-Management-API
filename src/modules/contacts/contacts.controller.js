@@ -11,7 +11,7 @@ export default class ContactsController {
    */
   static async createContact(req, res, next) {
     const { phone, name } = req.body;
-    const contactExists = (await Contact.count({ phone })) > 0;
+    const contactExists = (await Contact.countDocuments({ phone })) > 0;
 
     if(contactExists) {
       // Duplication
