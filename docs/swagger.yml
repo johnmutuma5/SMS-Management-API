@@ -129,7 +129,9 @@ paths:
                   value:
                     status: success
                     message: Contact deleted successfully
-                    data: {}
+                    data:
+                      deleteContactCount: 1
+                      deleteSmsCount: 3
 
         "400":
           description: Invalid ObjectId for the contact
@@ -149,6 +151,105 @@ paths:
                     message: Invalid contact object id
 
 
+  /sms/add:
+    post:
+      summary: adding a new sms 
+      description: Allow users to add new SMSs
+      tags:
+        - SMS
+          
+      requestBody:
+        description: |+
+          The request body for adding an sms should include:
+             - `senderPhone` - the phone numner of the sender
+             - `recipientPhne` - the phone numner of the recipient
+             - `status` - message status
+               - Draft 
+               - Sent
+               - Delivered
+             - `message` - the message content
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SMS"
+            examples:
+              MessageFromSheelahToJohn:
+                value:
+                  status: Delivered
+                  senderPhone: "0725000000"
+                  recipientPhone: "0728000000"
+                  message: Hallo, how are you today?
+
+      responses:
+        "201":
+          description: SMS added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+              examples:
+                AddSMSSuccess:
+                  value:
+                    status: success
+                    message: Successfully recorded SMS
+                    data:
+                      createdSms:
+                        status: Delivered
+                        senderPhone: "0725000000"
+                        recipientPhone: "0728000000"
+                        message: Hallo, how are you today?
+                        _id: 5abc3defc3efcd2abcd3e
+        "400":
+          description: Unknown SMS status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  data:
+                    type: object
+              examples:
+                UnknownSMSStatus:
+                  value:
+                    status: fail
+                    message: unknown sms status value in body
+                    data:
+                      validValues:
+                        - Draft
+                        - Sent
+                        - Delivered
+        "404":
+          description: Sender or recipient not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+              examples:
+                UnknownSender:
+                  value:
+                    status: fail
+                    message: Sender not found
+                UnknownRecipient:
+                  value:
+                    status: fail
+                    message: Recipient not found
 
 components:
   schemas:
@@ -159,6 +260,19 @@ components:
           type: string
         name:
           type: string
+
+    SMS:
+      type: object
+      properties:
+        senderPhone:
+          type: string
+        recipientPhone:
+          type: string
+        message: 
+          type: string
+        status:
+          type: string
+
   examples:
     Contact:
       John:
