@@ -17,6 +17,11 @@ describe('SMS', () => {
     await SMS.deleteMany({});
   });
 
+  beforeEach(async () => {
+    await Contact.deleteMany({});
+    await SMS.deleteMany({});
+  });
+
   it('should handle unkown sender', async () => {
     const resp = await chai.request(app)
       .post('/v1/sms/add')

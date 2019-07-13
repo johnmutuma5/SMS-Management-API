@@ -129,7 +129,9 @@ paths:
                   value:
                     status: success
                     message: Contact deleted successfully
-                    data: {}
+                    data:
+                      deleteContactCount: 1
+                      deleteSmsCount: 3
 
         "400":
           description: Invalid ObjectId for the contact

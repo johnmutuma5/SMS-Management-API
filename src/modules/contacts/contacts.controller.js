@@ -1,10 +1,14 @@
 import Contact from './contacts.model';
+import SMS from '../sms/sms.model';
 import { isValidId } from '../../shared';
 
 export default class ContactsController {
 
   constructor(){}
 
+  /**
+   * Create a new contact record
+   */
   static async createContact(req, res, next) {
     const { phone, name } = req.body;
     const contactExists = (await Contact.count({ phone })) > 0;
@@ -48,14 +52,20 @@ export default class ContactsController {
         message: 'Invalid conctact object id',
       });
     }
-    const contact = await Contact.deleteOne({ _id });
-    //
-    // TODO delete associated sms
+    // delete the contact
+    const { deletedCount: deleteContactCount } = await Contact.deleteOne({ _id });
+    // delete all associated SMSs
+    const { deletedCount: deleteSmsCount } = await SMS.deleteMany({
+      $or: [ { sender: _id }, { recipient: _id } ],
+    });
 
     return res.status(200).json({
       status: 'success',
       message: 'Contact deleted successfully',
-      data: { contact },
-    })
+      data: {
+        deleteContactCount,
+        deleteSmsCount,
+      },
+    });
   }
 }
