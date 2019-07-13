@@ -44,6 +44,7 @@ export default class SMSController {
     const sender = await Contact.findOne({ phone: senderPhone })
     if (!sender) {
       return res.status(404).json({
+        status: 'fail',
         message: 'Sender not found',
       })
     }
@@ -51,6 +52,7 @@ export default class SMSController {
     const recipient = await Contact.findOne({ phone: recipientPhone })
     if (!recipient) {
       return res.status(404).json({
+        status: 'fail',
         message: 'Recipient not found',
       })
     }
