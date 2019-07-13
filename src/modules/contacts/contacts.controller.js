@@ -1,4 +1,5 @@
-import Contact, { isValidId } from './contacts.model';
+import Contact from './contacts.model';
+import { isValidId } from '../../shared';
 
 export default class ContactsController {
 
@@ -36,6 +37,9 @@ export default class ContactsController {
     }
   }
 
+  /**
+   * Delete contact
+   */
   static async deleteContact (req, res, next) {
     const { id: _id } = req.params;
     if (!(await isValidId(_id))) {
@@ -44,7 +48,9 @@ export default class ContactsController {
         message: 'Invalid conctact object id',
       });
     }
-    const contact = await Contact.remove({ _id });
+    const contact = await Contact.deleteOne({ _id });
+    //
+    // TODO delete associated sms
 
     return res.status(200).json({
       status: 'success',

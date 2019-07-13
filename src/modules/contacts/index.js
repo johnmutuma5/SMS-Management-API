@@ -1,3 +1,1 @@
-import contactsRouter from './contacts.router';
-
-export default contactsRouter;
+export { default as contactsRouter } from './contacts.router';

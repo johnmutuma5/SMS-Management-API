@@ -4,12 +4,12 @@ import ContactsController from './contacts.controller'
 const contactsRouter = new Router();
 
 contactsRouter
-  .route('/contacts')
+  .route('/')
   .post(ContactsController.createContact);
 
 contactsRouter
-  .route('/contacts/:id')
-  .delete(ContactsController.deleteContact); // TODO create deleteContact in ContactsController
+  .route('/:id')
+  .delete(ContactsController.deleteContact);
 
 export default contactsRouter;
 

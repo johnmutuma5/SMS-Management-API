@@ -22,7 +22,7 @@ mongoose
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use(appRouter);
+app.use('/v1', appRouter);
 
 // api docs
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
